@@ -17,51 +17,35 @@ var sendResponse = function(response, code, data) {
 
 module.exports = {
   messages: {
-    get: function (req, res) {}, // a function which handles a get request for all messages
-    post: function (req, res) {
-      var data = '';
-      req.on('data', function(chunk) {
-        data += chunk;
-        console.log("Chucks: ", chuck);
-      });
+    get: function (req, res) { // a function which handles a get request for all messages
 
-      res.on('end', function() {
-        console.log(data);
-        var message = JSON.parse(data.toString('utf8'));
-        var insert = 'insert messages values (' + message.username + ',' + message.text + ',' + message.roomname + ');';
-        // connection.query(insert, function(err, result, fields) {
-        //   if (err) { throw 'Error in post on line 18 in controllers'; }
-        //   console.log('you\'ve maybe written to the db', result);
-        models.messages.post(insert);
-        sendResponse(res, 201); // might need to move to index.js models?
-        
+    },
+
+    post: function (req, res) {  // a function which handles posting a message to the database
+      var message = req.body;
+      models.messages.post(message, function() {
+        sendResponse(res, 201);
       });
-    } // a function which handles posting a message to the database
+      // sendResponse(res, 201); // might need to move to index.js models?
+    }
   },
 
   users: {
-    // Ditto as above
-    get: function (req, res) {},
-    post: function (req, res) {
-      var data = '';
-      req.on('data', function(chunk) {
-        console.log('inside req.on data users');
-        data += chunk;
-      });
+    get: function (req, res) { // a function which handles a get request for all users
 
-      res.on('end', function() {
-        console.log('inside of res.on for users line 52');
-        var users = JSON.parse(data.toString('utf8'));
-        var insert = 'insert users values (' + users.username + ');';
-        // connection.query(insert, function(err, result, fields) {
-        //   if (err) { throw 'Error in post on line 56 in controllers'; }
-        //   console.log('you\'ve maybe written to the db', result);
-        //   sendResponse(res, 201);
-        // });
-        models.users.post();
-        sendResponse(res, 201); // might need to move to index.js models?
+    }, 
+    post: function (req, res) { // a function which handles posting a user to the database
+      console.log(req.body);
+      var username = req.body.username;
+      console.log(username);
+      models.users.post(username, function() {
+        sendResponse(res, 201);
       });
-    } // a function which handles posting a message to the database
+        
+      // sendResponse(res, 201); // might need to move to index.js models?
+       // a function which handles posting a message to the database
+    }
   }
 };
+
 

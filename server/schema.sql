@@ -24,10 +24,9 @@ drop table if exists messages;
 
 create table messages ( 
   id int not null auto_increment, 
-  user int not null, 
+  user varchar(140) not null, 
   text varchar(140) not null, 
-  room int not null, 
-  created_at varchar(100) not null, 
+  room varchar(140) not null, 
   primary key (id),
   FOREIGN KEY (user) REFERENCES users (id),
   FOREIGN KEY (room) REFERENCES rooms (id)

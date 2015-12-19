@@ -1,4 +1,4 @@
-var app = {
+ var app = {
   server: 'http://127.0.0.1:3000',
 
   rooms: [],
@@ -13,8 +13,9 @@ var app = {
 
     var message = {
       username: window.location.search.split('=')[1],
-      text: $('#message').val(),
-      roomname: $('#roomName').text() ? $('#roomName').text() : "All Messages"
+      message: $('#message').val(),
+      roomname: $('#roomName').text() ? $('#roomName').text() : "All Messages",
+      // created_at: new Date()
     };
 
     $('#message').val("What do you want to say?");
