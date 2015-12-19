@@ -1,34 +1,37 @@
-CREATE DATABASE chat;
+drop database if exists chat;
+
+create database chat;
 
 USE chat;
 
-DROP TABLE IF EXISTS `Messages`;
+drop table if exists users;
 
-CREATE TABLE messages (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `User` VARCHAR NULL DEFAULT NULL,
-  `Text` VARCHAR(140) NOT NULL DEFAULT 'NULL',
-  `Room` VARCHAR NULL DEFAULT NULL,
-  `Created at` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+create table users (
+  id int not null auto_increment,
+  username varchar(30) not null,
+  primary key (id)
 );
 
-CREATE TABLE `Users` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `Username` VARCHAR NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+drop table if exists rooms;
+
+create table rooms (
+  id int not null auto_increment,
+  roomname varchar(30) not null,
+  primary key (id)
 );
 
-DROP TABLE IF EXISTS `Rooms`;
-    
-CREATE TABLE `Rooms` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `Name` VARCHAR NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-);
+drop table if exists messages;
 
-ALTER TABLE `Messages` ADD FOREIGN KEY (User) REFERENCES `Users` (`id`);
-ALTER TABLE `Messages` ADD FOREIGN KEY (Room) REFERENCES `Rooms` (`id`);
+create table messages ( 
+  id int not null auto_increment, 
+  user int not null, 
+  text varchar(140) not null, 
+  room int not null, 
+  created_at varchar(100) not null, 
+  primary key (id),
+  FOREIGN KEY (user) REFERENCES users (id),
+  FOREIGN KEY (room) REFERENCES rooms (id)
+  );
 
 -- ---
 -- Test Data
