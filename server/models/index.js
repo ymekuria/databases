@@ -4,15 +4,40 @@ module.exports = {
   messages: {
     get: function () {}, // a function which produces all the messages
     post: function (message, callback) {
-      var insert = 'insert messages (user, text, room) values ("' + message.username + '","' + message.message + '","' + message.roomname + '");';
-      console.log("insert on line 8 -- models", insert);
-      db.query(insert, function(err, result, fields) {
-        if (err) { throw 'Error in writing to db on line 8 in models'; }
-        console.log('you\'ve maybe written to the messages table db', result);
-        callback();
+      var userId, roomId;
+      db.query('select id from users where username = ?',[message.username], function(err, result) {
+        if (err){
+          throw err;
+        }
+        if (result){
+          console.log('result:', result);
+          userId = result;
+        } else {
+          db.query('insert into users (username) values (?)',[message.username], function(err,result) {
+            if(err) {
+              throw err;
+            } 
+            
+            db.query('select id from users where username = ?', [message.username], function(err, result) {
+              if(err) {
+                throw err;
+              } 
+              userId = result;
+            });
+          });  
+        }
       });
-      db.end(); // a function which can be used to insert a message into the database
     }
+
+  //     var insert = 'insert messages (user, text, room) values ("' + message.username + '","' + message.message + '","' + message.roomname + '");';
+  //     console.log("insert on line 8 -- models", insert);
+  //     db.query(insert, function(err, result, fields) {
+  //       if (err) { throw 'Error in writing to db on line 8 in models'; }
+  //       console.log('you\'ve maybe written to the messages table db', result);
+  //       callback();
+  //     });
+  //     db.end(); // a function which can be used to insert a message into the database
+  //   }
   },
 
   users: {
