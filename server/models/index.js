@@ -6,24 +6,32 @@ module.exports = {
     post: function (message, callback) {
       var userId, roomId;
       db.query('select id, username from users where username = ?',[message.username], function(err, result) {
-        if (err){
-          throw err;
-        }
-        if (result){
-          console.log('result:', result);
-          console.log('last result: ', result[result.length - 1].id);
+        if(err) { throw err; }
+        if (result !== []){
           userId = result[0].id;
         } else {
           db.query('insert into users (username) values (?)',[message.username], function(err,result) {
-            if(err) {
-              throw err;
-            } 
-            
+            if(err) { throw err; } 
             db.query('select id from users where username = ?', [message.username], function(err, result) {
-              if(err) {
-                throw err;
-              } 
+              if(err) { throw err; }
               userId = result[0].id;
+            });
+          });  
+        }
+      });
+      db.query('select id from rooms where roomname = ?',[message.roomname], function(err, result) {
+        console.log('Results from 23: ', result);
+        if(err) { throw err; }
+        if (result.length !== 0) {
+          console.log("you're in the if block on line 26")
+          roomId = result[0].id;
+        } else {
+          db.query('insert into rooms (roomname) values (?)',[message.roomname], function(err,result) {
+          console.log('result:', result);
+            if(err) { throw err; } 
+            db.query('select id from rooms where roomname = ?', [message.roomname], function(err, result) {
+              if(err) { throw err; }
+              // roomId = result[0].id;
             });
           });  
         }
