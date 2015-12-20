@@ -5,13 +5,14 @@ module.exports = {
     get: function () {}, // a function which produces all the messages
     post: function (message, callback) {
       var userId, roomId;
-      db.query('select id from users where username = ?',[message.username], function(err, result) {
+      db.query('select id, username from users where username = ?',[message.username], function(err, result) {
         if (err){
           throw err;
         }
         if (result){
           console.log('result:', result);
-          userId = result;
+          console.log('last result: ', result[result.length - 1].id);
+          userId = result[0].id;
         } else {
           db.query('insert into users (username) values (?)',[message.username], function(err,result) {
             if(err) {
@@ -22,7 +23,7 @@ module.exports = {
               if(err) {
                 throw err;
               } 
-              userId = result;
+              userId = result[0].id;
             });
           });  
         }
