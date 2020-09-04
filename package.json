@@ -11,7 +11,7 @@
     "morgan": "^1.4.1",
     "mysql": "^2.10.0",
     "request": "^2.40.0",
-    "sequelize": "^2.0.6",
+    "sequelize": "^6.3.5",
     "siege": "^0.1.2"
   },
   "scripts": {
